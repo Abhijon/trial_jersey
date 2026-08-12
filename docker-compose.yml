@@ -1,14 +1,14 @@
 services:
   backend:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: trail-backend
     restart: always
     ports:
       - "5000:5000"
     env_file:
-      - .env
+      - ./backend/.env
     environment:
       - NODE_ENV=production
       - PORT=5000
