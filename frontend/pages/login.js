@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
 import copy from "../content/copy";
+import PasswordInput from "../components/PasswordInput";
 
 export default function Login() {
   const { login } = useAuth();
@@ -43,12 +44,10 @@ export default function Login() {
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">{copy.auth.passwordLabel}</label>
-          <input
-            type="password"
+          <PasswordInput
             required
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
-            className="w-full border border-charcoal/20 rounded-sm px-3 py-2 focus:border-pitch"
           />
         </div>
 
