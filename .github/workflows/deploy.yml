@@ -19,7 +19,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # 1. Navigate to application folder on EC2 (Update path if different on server)
-            cd /home/ubuntu/trail-com
+            cd /home/ubuntu/trail_jersey
 
             # 2. Fetch latest changes from main branch
             git pull origin main
