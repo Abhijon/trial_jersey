@@ -12,6 +12,21 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
     password: { type: String, required: true, minlength: 6, select: false },
+    isVerified: { type: Boolean, default: false },
+
+    // Signup OTP fields
+    signupOtp: { type: String, select: false },
+    signupOtpExpires: { type: Date },
+    signupOtpAttempts: { type: Number, default: 0 },
+    signupOtpLockUntil: { type: Date },
+    signupOtpLastSentAt: { type: Date },
+
+    // Forgot Password OTP fields
+    resetOtp: { type: String, select: false },
+    resetOtpExpires: { type: Date },
+    resetOtpAttempts: { type: Number, default: 0 },
+    resetOtpLockUntil: { type: Date },
+    resetOtpLastSentAt: { type: Date },
   },
   { timestamps: true }
 );
