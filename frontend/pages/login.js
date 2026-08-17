@@ -10,17 +10,24 @@ export default function Login() {
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [isUnverified, setIsUnverified] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    setIsUnverified(false);
     setSubmitting(true);
+
     try {
       await login(form.email, form.password);
       router.push("/");
     } catch (err) {
-      setError(err?.response?.data?.message || "Something went wrong. Please try again.");
+      const msg = err?.response?.data?.message || "Something went wrong. Please try again.";
+      setError(msg);
+      if (err?.response?.data?.isUnverified) {
+        setIsUnverified(true);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -43,7 +50,12 @@ export default function Login() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">{copy.auth.passwordLabel}</label>
+          <div className="flex justify-between items-center mb-1">
+            <label className="text-sm font-medium">{copy.auth.passwordLabel}</label>
+            <Link href="/forgot-password" className="text-xs text-pitch hover:underline">
+              Forgot password?
+            </Link>
+          </div>
           <PasswordInput
             required
             value={form.password}
@@ -51,7 +63,16 @@ export default function Login() {
           />
         </div>
 
-        {error && <p className="text-claret text-sm">{error}</p>}
+        {error && (
+          <div className="p-3 bg-red-50 text-claret text-sm rounded border border-red-200">
+            {error}
+            {isUnverified && (
+              <p className="mt-2 text-xs font-semibold">
+                Please check your inbox for the OTP code or complete sign up again to receive a new OTP.
+              </p>
+            )}
+          </div>
+        )}
 
         <button
           type="submit"

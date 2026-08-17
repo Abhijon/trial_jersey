@@ -31,9 +31,41 @@ export function AuthProvider({ children }) {
 
   async function signup(name, email, password) {
     const res = await api.post("/auth/signup", { name, email, password });
-    localStorage.setItem("trail_token", res.data.token);
-    setUser(res.data.user);
-    return res.data.user;
+    return res.data; // { message, email, requiresOtp: true }
+  }
+
+  async function verifySignupOtp(email, otp) {
+    const res = await api.post("/auth/verify-signup-otp", { email, otp });
+    if (res.data.token) {
+      localStorage.setItem("trail_token", res.data.token);
+      setUser(res.data.user);
+    }
+    return res.data;
+  }
+
+  async function resendSignupOtp(email) {
+    const res = await api.post("/auth/resend-signup-otp", { email });
+    return res.data;
+  }
+
+  async function forgotPassword(email) {
+    const res = await api.post("/auth/forgot-password", { email });
+    return res.data;
+  }
+
+  async function resendResetOtp(email) {
+    const res = await api.post("/auth/resend-reset-otp", { email });
+    return res.data;
+  }
+
+  async function resetPassword(email, otp, newPassword, confirmPassword) {
+    const res = await api.post("/auth/reset-password", {
+      email,
+      otp,
+      newPassword,
+      confirmPassword,
+    });
+    return res.data;
   }
 
   function logout() {
@@ -42,7 +74,20 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        signup,
+        verifySignupOtp,
+        resendSignupOtp,
+        forgotPassword,
+        resendResetOtp,
+        resetPassword,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
