@@ -25,16 +25,16 @@ module.exports = [
     image: `${s3BaseUrl}/trail-away-07.svg`,
     featured: true,
   },
-  {
-    name: "trailUnited Third Kit",
-    club: "trailUnited",
-    kitType: "third",
-    season: "2026/27",
-    price: 94.99,
-    description:
-      "The change strip. Darker, sharper, a little unexpected - for the fans who like their kit collection deep.",
-    image: `${s3BaseUrl}/trail-third-11.svg`,
-    featured: false,
+ {
+  name: "Real Madrid 2012/13 Away Jersey",
+  club: "Real Madrid",
+  kitType: "away",
+  season: "2012/13",
+  price: 89.99,
+  description:
+    "The iconic Real Madrid away shirt in deep green, featuring the classic adidas three-stripe detailing, club crest, and Bwin sponsor. A lightweight retro jersey inspired by the 2012/13 season.",
+    image:`${s3BaseUrl}/rm away.jpeg`,
+    featured: true,
   },
   {
     name: "trailUnited Heritage Retro Shirt",
