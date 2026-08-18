@@ -4,6 +4,7 @@ const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
 const requireAuth = require("../middleware/auth");
 const { sendSignupOtp, sendResetPasswordOtp } = require("../config/sendgrid");
+const { sendEmailViaQueue } = require("../config/rabbitmq");
 
 const router = express.Router();
 
@@ -68,12 +69,14 @@ router.post(
 
       let user = await User.findOne({ email: normalizedEmail }).select("+signupOtp");
 
+      const isNewUser = !user;
+
       // If user exists and is already verified
       if (user && user.isVerified) {
         return res.status(409).json({ message: "An account with this email already exists." });
       }
 
-      // If user exists but is not verified yet
+      // If user exists but is unverified
       if (user && !user.isVerified) {
         // Check lock status
         if (user.signupOtpLockUntil && user.signupOtpLockUntil > Date.now()) {
@@ -94,42 +97,30 @@ router.post(
           });
         }
 
-        const otp = generateOTP();
         user.name = name;
         user.password = password; // Will be hashed by pre-save
-        user.signupOtp = otp;
-        user.signupOtpExpires = new Date(Date.now() + OTP_EXPIRY_MS);
-        user.signupOtpLastSentAt = new Date();
-        user.signupOtpAttempts = 0;
         user.signupOtpLockUntil = undefined;
-        await user.save();
-
-        await sendSignupOtp(user.email, otp);
-
-        return res.status(200).json({
-          message: "Verification OTP has been sent to your email.",
-          email: user.email,
-          requiresOtp: true,
+      } else {
+        // New user registration
+        user = new User({
+          name,
+          email: normalizedEmail,
+          password,
+          isVerified: false,
         });
       }
 
-      // New user registration
+      // Common OTP generation & dispatch for both new and existing unverified users
       const otp = generateOTP();
-      user = new User({
-        name,
-        email: normalizedEmail,
-        password,
-        isVerified: false,
-        signupOtp: otp,
-        signupOtpExpires: new Date(Date.now() + OTP_EXPIRY_MS),
-        signupOtpLastSentAt: new Date(),
-        signupOtpAttempts: 0,
-      });
+      user.signupOtp = otp;
+      user.signupOtpExpires = new Date(Date.now() + OTP_EXPIRY_MS);
+      user.signupOtpLastSentAt = new Date();
+      user.signupOtpAttempts = 0;
 
       await user.save();
-      await sendSignupOtp(user.email, otp);
+      await sendEmailViaQueue({ type: "SIGNUP_OTP", email: user.email, otp });
 
-      res.status(201).json({
+      return res.status(isNewUser ? 201 : 200).json({
         message: "Verification OTP has been sent to your email.",
         email: user.email,
         requiresOtp: true,
@@ -275,7 +266,7 @@ router.post(
       user.signupOtpLastSentAt = new Date();
       await user.save();
 
-      await sendSignupOtp(user.email, otp);
+      await sendEmailViaQueue({ type: "SIGNUP_OTP", email: user.email, otp });
 
       res.json({ message: "A new OTP code has been sent to your email." });
     } catch (err) {
@@ -384,7 +375,7 @@ router.post(
       user.resetOtpAttempts = 0;
       await user.save();
 
-      await sendResetPasswordOtp(user.email, otp);
+      await sendEmailViaQueue({ type: "RESET_OTP", email: user.email, otp });
 
       res.json({
         message: "Password reset OTP sent to your email.",
@@ -440,7 +431,7 @@ router.post(
       user.resetOtpLastSentAt = new Date();
       await user.save();
 
-      await sendResetPasswordOtp(user.email, otp);
+      await sendEmailViaQueue({ type: "RESET_OTP", email: user.email, otp });
 
       res.json({ message: "A new password reset OTP has been sent to your email." });
     } catch (err) {
