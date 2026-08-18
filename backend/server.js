@@ -35,8 +35,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: "Something went wrong on our end" });
 });
 
+const { initRabbitMQ } = require("./config/rabbitmq");
+
 const PORT = process.env.PORT || 5000;
 
-connectDB().then(() => {
+connectDB().then(async () => {
+  await initRabbitMQ();
   app.listen(PORT, () => console.log(`[server] trailAPI running on port ${PORT}`));
 });
+
