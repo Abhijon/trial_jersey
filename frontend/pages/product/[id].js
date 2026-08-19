@@ -64,7 +64,7 @@ export default function ProductDetail() {
         key: key || "rzp_test_YOUR_KEY_ID",
         amount: amount,
         currency: currency || "INR",
-        name: "Trail.com",
+        name: "Trial.com",
         description: `${product.name} (Size: ${size})`,
         image: product.image,
         order_id: razorpayOrderId,
