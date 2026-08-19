@@ -64,20 +64,20 @@ router.post(
   }
 );
 
-// GET /api/orders - only the logged-in user's own orders
+// GET /api/orders - only the logged-in user's successfully paid orders
 router.get("/", async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const orders = await Order.find({ user: req.user._id, paymentStatus: "paid" }).sort({ createdAt: -1 });
     res.json({ orders });
   } catch (err) {
     res.status(500).json({ message: "Could not load orders", error: err.message });
   }
 });
 
-// GET /api/orders/:id - only if it belongs to the logged-in user
+// GET /api/orders/:id - only if it belongs to the logged-in user and is paid
 router.get("/:id", async (req, res) => {
   try {
-    const order = await Order.findOne({ _id: req.params.id, user: req.user._id });
+    const order = await Order.findOne({ _id: req.params.id, user: req.user._id, paymentStatus: "paid" });
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }

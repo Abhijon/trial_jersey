@@ -1,6 +1,12 @@
 import Link from "next/link";
 
 export default function ProductCard({ product }) {
+  const formattedPrice = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(product.price);
+
   return (
     <Link
       href={`/product/${product._id}`}
@@ -19,8 +25,8 @@ export default function ProductCard({ product }) {
           {product.kitType} · {product.season}
         </p>
         <h3 className="font-display text-lg leading-tight mb-1">{product.name}</h3>
-        <p className="text-charcoal/70 text-sm">
-          {product.currency === "USD" ? "$" : product.currency} {product.price.toFixed(2)}
+        <p className="text-charcoal/70 text-sm font-semibold">
+          {formattedPrice}
         </p>
       </div>
     </Link>

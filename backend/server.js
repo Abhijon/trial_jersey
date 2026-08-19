@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/products");
 const orderRoutes = require("./routes/orders");
+const paymentRoutes = require("./routes/payment");
 
 const app = express();
 
@@ -15,7 +16,13 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
+app.use(
+  express.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf;
+    },
+  })
+);
 app.get("/",(req,res)=>{
   res.json({status:"ok",message:"trailAPI is running"});
 })
@@ -25,6 +32,7 @@ app.get("/api/health", (req, res) => res.json({ status: "healthy", service: "tra
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // Fallback 404
 app.use((req, res) => res.status(404).json({ message: "Route not found" }));
