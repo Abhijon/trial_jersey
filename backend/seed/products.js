@@ -8,7 +8,8 @@ module.exports = [
     club: "trailUnited",
     kitType: "home",
     season: "2026/27",
-    price: 89.99,
+    price: 2999,
+    currency: "INR",
     description:
       "The home shirt, cut from lightweight breathable weave with a ribbed collar. Worn under the lights, made for the terraces.",
     image: `${s3BaseUrl}/trail-home-01.svg`,
@@ -19,21 +20,23 @@ module.exports = [
     club: "trailUnited",
     kitType: "away",
     season: "2026/27",
-    price: 89.99,
+    price: 2999,
+    currency: "INR",
     description:
       "Clean, off-pitch colourway with tonal detailing. Same match-grade fabric, built for wherever the fixture takes you.",
     image: `${s3BaseUrl}/trail-away-07.svg`,
     featured: true,
   },
- {
-  name: "Real Madrid 2012/13 Away Jersey",
-  club: "Real Madrid",
-  kitType: "away",
-  season: "2012/13",
-  price: 89.99,
-  description:
-    "The iconic Real Madrid away shirt in deep green, featuring the classic adidas three-stripe detailing, club crest, and Bwin sponsor. A lightweight retro jersey inspired by the 2012/13 season.",
-    image:`${s3BaseUrl}/rm away.jpeg`,
+  {
+    name: "Real Madrid 2012/13 Away Jersey",
+    club: "Real Madrid",
+    kitType: "away",
+    season: "2012/13",
+    price: 3499,
+    currency: "INR",
+    description:
+      "The iconic Real Madrid away shirt in deep green, featuring the classic adidas three-stripe detailing, club crest, and Bwin sponsor. A lightweight retro jersey inspired by the 2012/13 season.",
+    image: `${s3BaseUrl}/rm away.jpeg`,
     featured: true,
   },
   {
@@ -41,7 +44,8 @@ module.exports = [
     club: "trailUnited",
     kitType: "retro",
     season: "1998 Reissue",
-    price: 79.99,
+    price: 2499,
+    currency: "INR",
     description:
       "A reissue of the shirt that started it all. Heavier cotton-feel fabric, the badge you remember, none of the gimmicks.",
     image: `${s3BaseUrl}/trail-retro-08.svg`,
@@ -52,7 +56,8 @@ module.exports = [
     club: "trailUnited",
     kitType: "goalkeeper",
     season: "2026/27",
-    price: 92.99,
+    price: 2799,
+    currency: "INR",
     description:
       "Padded elbow panels and a grippier cuff. Built for the last line of defence, not just the look.",
     image: `${s3BaseUrl}/trail-gk-01.svg`,
@@ -63,7 +68,8 @@ module.exports = [
     club: "trailUnited",
     kitType: "home",
     season: "2026/27",
-    price: 99.99,
+    price: 3199,
+    currency: "INR",
     description:
       "The home shirt in long sleeve. Same crest, same fit through the shoulders, built for cold-weather fixtures.",
     image: `${s3BaseUrl}/trail-home-10.svg`,
@@ -74,7 +80,8 @@ module.exports = [
     club: "trailUnited",
     kitType: "away",
     season: "2026/27",
-    price: 89.99,
+    price: 2999,
+    currency: "INR",
     description:
       "The away shirt, tailored fit. Same fabric technology, cut to sit right without losing the shape of the kit.",
     image: `${s3BaseUrl}/trail-away-04.svg`,
@@ -85,7 +92,8 @@ module.exports = [
     club: "trailUnited",
     kitType: "anthem",
     season: "2026/27",
-    price: 119.99,
+    price: 3999,
+    currency: "INR",
     description:
       "What the squad wears walking out. A full-zip anthem jacket for matchday mornings and the long walk to the ground.",
     image: `${s3BaseUrl}/trail-anthem-23.svg`,

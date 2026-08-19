@@ -10,8 +10,8 @@ const productSchema = new mongoose.Schema(
       default: "home",
     },
     season: { type: String, default: "2026/27" },
-    price: { type: Number, required: true }, // stored in smallest currency unit-free number, e.g. 79.99
-    currency: { type: String, default: "USD" },
+    price: { type: Number, required: true }, // stored in INR
+    currency: { type: String, default: "INR" },
     sizes: { type: [String], default: ["S", "M", "L", "XL", "XXL"] },
     description: { type: String, required: true },
     image: { type: String, required: true }, // path under /images/products/
