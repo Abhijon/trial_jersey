@@ -47,7 +47,7 @@ jobs:
             --instance-ids "${{ secrets.EC2_INSTANCE_ID_PROD }}" \
             --document-name "AWS-RunShellScript" \
             --parameters 'commands=[
-              "cd /home/ubuntu/trial_jersey",
+              "cd /root/trial_jersey",
               "git pull origin prod",
               "docker compose up -d --build"
             ]' \
