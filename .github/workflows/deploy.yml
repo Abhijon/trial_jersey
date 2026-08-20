@@ -4,14 +4,16 @@ on:
   push:
     branches:
       - main
+      - prod
   workflow_dispatch:
 
 jobs:
-  deploy:
-    name: Deploy to EC2 Instance
+  deploy-dev:
+    name: Deploy to Dev EC2 (main)
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
-      - name: Deploy to EC2 via SSH
+      - name: Deploy to Dev EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -23,6 +25,27 @@ jobs:
 
             # 2. Fetch latest changes from main branch
             git pull origin main
+
+            # 3. Rebuild and restart Docker containers
+            docker compose up -d --build
+
+  deploy-prod:
+    name: Deploy to Prod EC2 (prod)
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/prod'
+    steps:
+      - name: Deploy to Prod EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST_PROD }}
+          username: ${{ secrets.EC2_USER_PROD }}
+          key: ${{ secrets.EC2_SSH_KEY_PROD }}
+          script: |
+            # 1. Navigate to application folder on prod EC2
+            cd /home/ubuntu/trial_jersey 
+
+            # 2. Fetch latest changes from prod branch
+            git pull origin prod
 
             # 3. Rebuild and restart Docker containers
             docker compose up -d --build
